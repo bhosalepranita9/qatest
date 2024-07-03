@@ -1,25 +1,66 @@
-# qa-test
+Step 1: Setting up the Kubernetes Cluster (Minikube Example)
 
-**Kubernetes Deployment:**
+Install Minikube:
 
-Deploy the services to a local Kubernetes cluster (e.g., Minikube or Kind).
+Follow the official installation guide for Minikube.
 
-**Verification:**
+Ensure kubectl is also installed as it will be used to interact with Kubernetes.
+Start Minikube:
 
-- Ensure the frontend service can successfully communicate with the backend service.
-- Verify that accessing the frontend URL displays the greeting message fetched from the backend.
+Open a terminal and start Minikube
+minikube start
 
-**Automated Testing:**
+Step 2: Deploying Services to Kubernetes
+Clone the Repository:
 
-- Write a simple test script (using a tool of your choice) to verify the integration between the frontend and backend services.
-- The test should check that the frontend correctly displays the message returned by the backend.
+Clone the GitHub repository containing the services:
+git clone https://github.com/Vengatesh-m/qa-test
+cd qa-test
 
-**Documentation:**
+Deploy Backend and Frontend:
 
-- Provide a README file with instructions on how to set up and run the automated tests script.
+Review the Kubernetes manifests (deployment.yaml, service.yaml) in the repository.
+Deploy the backend and frontend services using kubectl:
+kubectl apply -f backend-deployment.yaml
+kubectl apply -f backend-service.yaml
+kubectl apply -f frontend-deployment.yaml
+kubectl apply -f frontend-service.yaml
 
-**Deliverables:**
-- Test script for automated testing.
-- README file with setup and execution instructions.
+Verify Deployment:
 
-**Github repo should be Public**
+Check that all pods are running:
+kubectl get pods
+
+Verify services are created:
+kubectl get services
+
+Ensure deployments are ready:
+kubectl get deployments
+
+
+Step 3: Verification
+Communication Between Services:
+
+Check logs to verify frontend can access backend
+kubectl logs <frontend-pod-name>
+
+Access Frontend URL:
+
+Use Minikube to get the frontend URL:
+minikube service <frontend-service-name>
+
+
+Step 4: Automated Testing
+Create a Python script (test_integration.py) to verify frontend-backend integration:
+
+import requests
+
+frontend_url = "<frontend-service-url>"
+expected_message = "Hello from backend!"
+
+response = requests.get(frontend_url)
+assert response.status_code == 200
+assert expected_message in response.text
+
+print("Integration test passed successfully!")
+
